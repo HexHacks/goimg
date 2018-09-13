@@ -3,9 +3,12 @@ package main
 import (
 	"fmt"
 	"image"
+	"image/color"
 	"image/png"
 	"log"
 	"os"
+
+	"github.com/hexhacks/goimg/imgutil"
 )
 
 func main() {
@@ -45,18 +48,9 @@ func createImageFile(folder string, time int) (*os.File, error) {
 }
 
 func clearImage(img *image.RGBA) {
-	rct := img.Rect
-	for y := 0; y < rct.Max.Y; y++ {
-		for x := 0; x < rct.Max.X; x++ {
-			start := (y-rct.Min.Y)*img.Stride + (x-rct.Min.X)*4
-			rgba := img.Pix[start : start+4]
-
-			rgba[0] = 255
-			rgba[1] = 0
-			rgba[2] = 0
-			rgba[3] = 255
-		}
-	}
+	imgutil.TraverseSequential(img, func(x, y int) color.RGBA {
+		return color.RGBA{255, 0, 0, 255}
+	})
 }
 
 func printTodo() {
