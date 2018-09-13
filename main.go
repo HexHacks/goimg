@@ -18,7 +18,7 @@ func main() {
 	clearImage(img)
 
 	fmt.Println("Opening test.png")
-	file, err := createImageFile(1)
+	file, err := createImageFile("test", 1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -32,8 +32,16 @@ func main() {
 	fmt.Println("Done")
 }
 
-func createImageFile(time int) (*os.File, error) {
-	return os.Create("test.png")
+func createImageFile(folder string, time int) (*os.File, error) {
+	fullFolder := fmt.Sprintf("output/%v", folder)
+	err := os.MkdirAll(fullFolder, os.ModeDir)
+	if err != nil {
+		return nil, err
+	}
+
+	name := fmt.Sprintf("frame_%v.png", time)
+	output := fmt.Sprintf("%v/%v", fullFolder, name)
+	return os.Create(output)
 }
 
 func clearImage(img *image.RGBA) {
