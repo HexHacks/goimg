@@ -37,7 +37,7 @@ func main() {
 
 func createImageFile(folder string, time int) (*os.File, error) {
 	fullFolder := fmt.Sprintf("output/%v", folder)
-	err := os.MkdirAll(fullFolder, os.ModeDir)
+	err := os.MkdirAll(fullFolder, 0700)
 	if err != nil {
 		return nil, err
 	}
