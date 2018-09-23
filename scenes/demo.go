@@ -2,6 +2,7 @@ package scenes
 
 import (
 	"fmt"
+	"image"
 )
 
 type Demo struct {
@@ -23,9 +24,14 @@ func (d *Demo) Name() string {
 	return "Demo"
 }
 
-func (d *Demo) LoadResources() {
+func (d *Demo) Load() {
 
 }
-func (d *Demo) Render(t float64) {
+
+func (d *Demo) Unload() {
+
+}
+
+func (d Demo) Render(img *image.RGBA, t float64) {
 
 }
