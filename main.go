@@ -8,7 +8,12 @@ import (
 	"log"
 	"os"
 
-	"github.com/hexhacks/goimg/imgutil"
+	"./imgutil"
+	"./scenes"
+)
+
+var (
+	sceneRing scenes.SceneRing
 )
 
 func main() {
