@@ -13,3 +13,6 @@
 
 # Output directory (Image files)
 output/
+
+# Darwin
+.DS_Store
