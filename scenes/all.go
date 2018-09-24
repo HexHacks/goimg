@@ -32,6 +32,6 @@ func (s *SceneRing) Unload() {
 	s.current().Unload()
 }
 
-func (s SceneRing) Render(img *image.RGBA, t float64) {
+func (s SceneRing) Render(img image.Image, t float64) {
 	s.current().Render(img, t)
 }

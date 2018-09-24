@@ -1,12 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"image/png"
 	"log"
+	"time"
 
 	"./imgutil"
 
 	"github.com/fogleman/fauxgl"
+	"github.com/hexhacks/goimg/scenes"
 	"github.com/nfnt/resize"
 )
 
@@ -20,7 +23,7 @@ const (
 )
 
 var (
-	eye    = fauxgl.V(-3, 1, -0.75)               // camera position
+	eye    = fauxgl.V(0, 0, -5)                   // camera position
 	center = fauxgl.V(0, -0.07, 0)                // view center position
 	up     = fauxgl.V(0, 1, 0)                    // up vector
 	light  = fauxgl.V(-0.75, 1, 0.25).Normalize() // light direction
@@ -28,21 +31,23 @@ var (
 )
 
 func main() {
-	// load a mesh
-	mesh, err := fauxgl.LoadOBJ("input/truemimer.obj")
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	// fit mesh in a bi-unit cube centered at the origin
-	mesh.BiUnitCube()
-
-	// smooth the normals
-	mesh.SmoothNormalsThreshold(fauxgl.Radians(30))
+	tn := time.Now()
+	mesh, err := LoadMesh()
+	fmt.Println("LoadMesh() ", time.Now().Sub(tn))
 
 	// create a rendering context
 	context := fauxgl.NewContext(width*scale, height*scale)
-	context.ClearColorBufferWith(fauxgl.HexColor("#FFF8E3"))
+	//context.ClearColorBufferWith(fauxgl.HexColor("#FFF8E3"))
+
+	trueMimer := scenes.NewTrueMimer()
+	trueMimer.Load()
+
+	tn = time.Now()
+	trueMimer.Render(context.ColorBuffer, 0)
+	fmt.Println("Render() ", time.Now().Sub(tn))
+
+	trueMimer.Unload()
 
 	// create transformation matrix and light direction
 	aspect := float64(width) / float64(height)
@@ -54,7 +59,9 @@ func main() {
 	context.Shader = shader
 
 	// render
+	tn = time.Now()
 	context.DrawMesh(mesh)
+	fmt.Println("DrawMesh() ", time.Now().Sub(tn))
 
 	// downsample image for antialiasing
 	image := context.Image()
@@ -71,4 +78,20 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func LoadMesh() (*fauxgl.Mesh, error) {
+	// load a mesh
+	mesh, err := fauxgl.LoadOBJ("input/truemimer.obj")
+	if err != nil {
+		return mesh, err
+	}
+
+	// fit mesh in a bi-unit cube centered at the origin
+	mesh.BiUnitCube()
+
+	// smooth the normals
+	mesh.SmoothNormalsThreshold(fauxgl.Radians(30))
+
+	return mesh, nil
 }

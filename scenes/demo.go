@@ -27,6 +27,6 @@ func (d *Demo) Unload() {
 
 }
 
-func (d Demo) Render(img *image.RGBA, t float64) {
+func (d Demo) Render(img image.Image, t float64) {
 
 }

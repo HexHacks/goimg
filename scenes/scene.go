@@ -7,5 +7,5 @@ import (
 type Scene interface {
 	Load()
 	Unload()
-	Render(img *image.RGBA, t float64)
+	Render(img image.Image, t float64)
 }
