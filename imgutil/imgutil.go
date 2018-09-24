@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	"log"
 	"os"
 )
 
 type PerPixelFuncI func(x, y int) color.RGBA
 type PerPixelFuncF func(x, y float32) color.RGBA
 
-func TraverseSequential(img *image.RGBA, fnc PerPixelFuncI) {
+func traverseSequentialRgba(img *image.RGBA, fnc PerPixelFuncI) {
 	rct := img.Rect
 	for y := 0; y < rct.Max.Y; y++ {
 		for x := 0; x < rct.Max.X; x++ {
@@ -25,6 +26,15 @@ func TraverseSequential(img *image.RGBA, fnc PerPixelFuncI) {
 			rgba[3] = clr.A
 		}
 	}
+}
+
+func Traverse(img image.Image, fc PerPixelFuncI) {
+	rgba, ok := img.(*image.RGBA)
+	if ok {
+		log.Fatal("Can't convert to RGBA")
+	}
+
+	traverseSequentialRgba(rgba, fc)
 }
 
 func CreateImageFile(folder string, time int) (*os.File, error) {
