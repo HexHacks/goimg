@@ -6,15 +6,10 @@ import (
 )
 
 type Demo struct {
-	test int
-	runa rune
 }
 
 func NewDemo() *Demo {
-	d := &Demo{
-		test: 1,
-		runa: 'a',
-	}
+	d := &Demo{}
 
 	fmt.Printf("CreateDemo()")
 	return d
