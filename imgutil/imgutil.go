@@ -1,8 +1,10 @@
 package imgutil
 
 import (
+	"fmt"
 	"image"
 	"image/color"
+	"os"
 )
 
 type PerPixelFuncI func(x, y int) color.RGBA
@@ -23,4 +25,16 @@ func TraverseSequential(img *image.RGBA, fnc PerPixelFuncI) {
 			rgba[3] = clr.A
 		}
 	}
+}
+
+func CreateImageFile(folder string, time int) (*os.File, error) {
+	fullFolder := fmt.Sprintf("output/%v", folder)
+	err := os.MkdirAll(fullFolder, 0700)
+	if err != nil {
+		return nil, err
+	}
+
+	name := fmt.Sprintf("frame_%v.png", time)
+	output := fmt.Sprintf("%v/%v", fullFolder, name)
+	return os.Create(output)
 }
