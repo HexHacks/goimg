@@ -7,8 +7,10 @@ import (
 	"time"
 
 	"./imgutil"
+	"./shaders"
 
 	"github.com/fogleman/fauxgl"
+	"github.com/hexhacks/goimg/jaux"
 	"github.com/hexhacks/goimg/scenes"
 	"github.com/nfnt/resize"
 )
@@ -23,17 +25,17 @@ const (
 )
 
 var (
-	eye    = fauxgl.V(0, 0, -5)                   // camera position
-	center = fauxgl.V(0, -0.07, 0)                // view center position
-	up     = fauxgl.V(0, 1, 0)                    // up vector
-	light  = fauxgl.V(-0.75, 1, 0.25).Normalize() // light direction
-	color  = fauxgl.HexColor("#468966")           // object color
+	eye    = fauxgl.V(0, 0, 5)                     // camera position
+	center = fauxgl.V(0, -0.07, 0)                 // view center position
+	up     = fauxgl.V(0, 1, 0)                     // up vector
+	light  = fauxgl.V(-0.75, -1, 1.25).Normalize() // light direction
+	color  = fauxgl.HexColor("#468966")            // object color
 )
 
 func main() {
 
 	tn := time.Now()
-	mesh, err := LoadMesh()
+	mesh, err := jaux.LoadMesh("truemimer")
 	fmt.Println("LoadMesh() ", time.Now().Sub(tn))
 
 	// create a rendering context
@@ -53,8 +55,8 @@ func main() {
 	aspect := float64(width) / float64(height)
 	matrix := fauxgl.LookAt(eye, center, up).Perspective(fovy, aspect, near, far)
 
-	// use builtin phong shader
-	shader := fauxgl.NewPhongShader(matrix, light, eye)
+	shader := shaders.NewScalesShader(matrix, light, eye)
+	//shader.Texture = texture
 	shader.ObjectColor = color
 	context.Shader = shader
 
@@ -78,20 +80,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func LoadMesh() (*fauxgl.Mesh, error) {
-	// load a mesh
-	mesh, err := fauxgl.LoadOBJ("input/truemimer.obj")
-	if err != nil {
-		return mesh, err
-	}
-
-	// fit mesh in a bi-unit cube centered at the origin
-	mesh.BiUnitCube()
-
-	// smooth the normals
-	mesh.SmoothNormalsThreshold(fauxgl.Radians(30))
-
-	return mesh, nil
 }
