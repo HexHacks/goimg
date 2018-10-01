@@ -1,11 +1,9 @@
 package scenes
 
-import (
-	"image"
-)
+import "image"
 
 type Scene interface {
 	Load()
 	Unload()
-	Render(img image.Image, t float64)
+	Render(t float64) image.Image
 }

@@ -15,7 +15,7 @@ func NewDemo() *Demo {
 	return d
 }
 
-func (d *Demo) Name() string {
+func (d *Demo) String() string {
 	return "Demo"
 }
 
@@ -27,6 +27,6 @@ func (d *Demo) Unload() {
 
 }
 
-func (d Demo) Render(img image.Image, t float64) {
-
+func (d Demo) Render(t float64) image.Image {
+	return nil
 }
